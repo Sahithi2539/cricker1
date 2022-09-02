@@ -48,7 +48,7 @@ class _displayState extends State<display> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Add User'),
+          title: Text('Records'),
         ),
         body: Center(
           child: Column(
@@ -63,6 +63,10 @@ class _displayState extends State<display> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
+                            leading: const CircleAvatar(
+                              radius: 20,
+                              child: Icon(Icons.person),
+                            ),
                             title: GetUserName(documentId: docIDs[index]),
                             tileColor: Colors.grey[200],
                           ),
