@@ -69,6 +69,16 @@ class _displayState extends State<display> {
                             ),
                             title: GetUserName(documentId: docIDs[index]),
                             tileColor: Colors.grey[200],
+                            trailing: ElevatedButton(
+                              child: new Text('Incomplete'),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new display()),
+                                );
+                              },
+                            ),
                           ),
                         );
                       },
