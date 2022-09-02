@@ -69,6 +69,7 @@ class _displayState extends State<display> {
                             ),
                             title: GetUserName(documentId: docIDs[index]),
                             tileColor: Colors.grey[200],
+                            //button to refreshed
                             trailing: ElevatedButton(
                               child: new Text('Incomplete'),
                               onPressed: () {
