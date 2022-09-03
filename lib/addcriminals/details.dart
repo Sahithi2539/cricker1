@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cricker/addcriminals/display.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'display.dart';
@@ -38,15 +37,19 @@ class _detailsState extends State<details> {
   final controllerCriminalid = TextEditingController();
   final controllerAddress = TextEditingController();
   final contRollerDist = TextEditingController();
-  final controllerCategory = TextEditingController();
+  //final controllerCategory = DropdownButton();
   final controllerShift = TextEditingController();
 
+  //adding criminal catory list
+
+  final items = ['KD Sheets', 'Rowdy Sheets', 'Suspect Sheets', 'DC Sheets'];
+  late String value = 'KD Sheets';
   //final controllerDate = TextEditingController();
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Add User'),
+          title: Text('Add Crminal'),
         ),
         body: ListView(
           padding: EdgeInsets.all(16),
@@ -77,16 +80,26 @@ class _detailsState extends State<details> {
                 decoration: decoration('Address'),
                 keyboardType: TextInputType.text),
             const SizedBox(height: 24),
-            TextField(
-                controller: controllerCategory,
-                decoration: decoration('Category'),
-                keyboardType: TextInputType.text),
-            const SizedBox(height: 24),
+
+            //change textfield to dropdown
+            DropdownButton<String>(
+              value: value,
+              items: items.map(buildMenuItem).toList(),
+              onChanged: (value) => setState(() => this.value = value!),
+            ),
+
+            // TextField(
+            //     controller: controllerCategory,
+            //     decoration: decoration('Category'),
+            //     keyboardType: TextInputType.text),
+            // const SizedBox(height: 24),
+
             TextField(
                 controller: controllerShift,
                 decoration: decoration('Shift'),
                 keyboardType: TextInputType.text),
             const SizedBox(height: 24),
+
             // DateTimeField(
             //   controller: controllerDate,
             //   decoration: decoration('Birthday'),
@@ -126,10 +139,20 @@ class _detailsState extends State<details> {
                   age: int.parse(controllerAge.text),
                   district: contRollerDist.text,
                   address: controllerAddress.text,
-                  category: controllerCategory.text,
+                  category: value,
                   shift: controllerShift.text,
                   //birthday: DateTime.parse(controllerDate.text),
                 );
+
+                DropdownMenuItem<String> buildMenuItem(String item) =>
+                    DropdownMenuItem(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                    );
 
                 createUser(user);
                 Navigator.push(
@@ -140,6 +163,13 @@ class _detailsState extends State<details> {
             ),
             const SizedBox(height: 32),
           ],
+        ),
+      );
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       );
 
