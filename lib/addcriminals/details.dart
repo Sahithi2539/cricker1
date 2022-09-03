@@ -43,7 +43,9 @@ class _detailsState extends State<details> {
   //adding criminal catory list
 
   final items = ['KD Sheets', 'Rowdy Sheets', 'Suspect Sheets', 'DC Sheets'];
+  final shifts = ['Day', 'Night'];
   late String value = 'KD Sheets';
+  late String shift = 'Day';
   //final controllerDate = TextEditingController();
 
   @override
@@ -81,24 +83,19 @@ class _detailsState extends State<details> {
                 keyboardType: TextInputType.text),
             const SizedBox(height: 24),
 
-            //change textfield to dropdown
+            //DopDown for Criminal catogary
             DropdownButton<String>(
               value: value,
               items: items.map(buildMenuItem).toList(),
               onChanged: (value) => setState(() => this.value = value!),
             ),
 
-            // TextField(
-            //     controller: controllerCategory,
-            //     decoration: decoration('Category'),
-            //     keyboardType: TextInputType.text),
-            // const SizedBox(height: 24),
-
-            TextField(
-                controller: controllerShift,
-                decoration: decoration('Shift'),
-                keyboardType: TextInputType.text),
-            const SizedBox(height: 24),
+            //dropdown for Shift
+            DropdownButton<String>(
+              value: shift,
+              items: shifts.map(buildMenuItem).toList(),
+              onChanged: (shift) => setState(() => this.shift = shift!),
+            ),
 
             // DateTimeField(
             //   controller: controllerDate,
@@ -143,16 +140,6 @@ class _detailsState extends State<details> {
                   shift: controllerShift.text,
                   //birthday: DateTime.parse(controllerDate.text),
                 );
-
-                DropdownMenuItem<String> buildMenuItem(String item) =>
-                    DropdownMenuItem(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                    );
 
                 createUser(user);
                 Navigator.push(
