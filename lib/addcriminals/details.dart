@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cricker/addcriminals/display.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'display.dart';
 import '../criminalsheets/criminalsheets.dart';
 import '../attendence/SecondScreen.dart';
-import 'image.dart';
 import '../attendence/verification.dart';
 import '../attendence/camera_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,7 +14,6 @@ import '../firebase_options.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import '../upload/storage.dart';
 import 'package:path/path.dart';
 
 class details extends StatefulWidget {
@@ -31,14 +29,10 @@ class _detailsState extends State<details> {
   final controllerAge = TextEditingController();
   final controllerCriminalid = TextEditingController();
   final controllerAddress = TextEditingController();
-  final contRollerDist = TextEditingController();
+  final contRollerPincode = TextEditingController();
   //final controllerCategory = DropdownButton();
   final controllerShift = TextEditingController();
-  final controllerImageurl = TextEditingController();
-
-  File? image;
-
-  Storage _storage = new Storage();
+  String imageurl = "";
 
   //adding criminal catory list
 
@@ -56,38 +50,6 @@ class _detailsState extends State<details> {
         body: ListView(
           padding: EdgeInsets.all(16),
           children: <Widget>[
-            Container(
-                height: 140,
-                width: 180,
-                color: Colors.black12,
-                child: image == null
-                    ? Icon(
-                        Icons.image,
-                        size: 50,
-                      )
-                    : Image.file(
-                        image!,
-                        fit: BoxFit.fill,
-                      )),
-            ElevatedButton(
-                child: Text('pick image'),
-                onPressed: () {
-                  _storage.getImage(context).then((file) {
-                    setState(() {
-                      image = File(file.path);
-                      // print(file.path);
-                    });
-                  });
-                }),
-            TextButton(
-                onPressed: () {
-                  if (image != null) {
-                    _storage.uploadFile(image!, context);
-                  } else
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("No Image was selected")));
-                },
-                child: Text('Upload Image')),
             TextField(
               controller: controllerCriminalid,
               decoration: decoration('Criminal Id'),
@@ -105,16 +67,15 @@ class _detailsState extends State<details> {
             ),
             const SizedBox(height: 24),
             TextField(
-                controller: contRollerDist,
-                decoration: decoration('District'),
-                keyboardType: TextInputType.text),
-            const SizedBox(height: 24),
-            TextField(
                 controller: controllerAddress,
                 decoration: decoration('Address'),
                 keyboardType: TextInputType.text),
             const SizedBox(height: 24),
-
+            TextField(
+                controller: contRollerPincode,
+                decoration: decoration('Pincode'),
+                keyboardType: TextInputType.number),
+            const SizedBox(height: 24),
             //DopDown for Criminal catogary
             DropdownButton<String>(
               value: value,
@@ -136,18 +97,17 @@ class _detailsState extends State<details> {
                   criminalid: controllerCriminalid.text,
                   name: controllerName.text,
                   age: int.parse(controllerAge.text),
-                  district: contRollerDist.text,
+                  pincode: int.parse(contRollerPincode.text),
                   address: controllerAddress.text,
                   category: value,
-                  shift: controllerShift.text,
-                  imageurl: controllerImageurl.text,
+                  shift: shift,
+                  imageurl: '',
                   //birthday: DateTime.parse(controllerDate.text),
                 );
-
                 createUser(user);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Home()),
+                  MaterialPageRoute(builder: (context) => details()),
                 );
               },
             ),
@@ -183,7 +143,7 @@ class User {
   final int age;
   final String criminalid;
   final String address;
-  final String district;
+  final int pincode;
   final String category;
   final String shift;
   final String imageurl;
@@ -194,7 +154,7 @@ class User {
     required this.criminalid,
     required this.name,
     required this.age,
-    required this.district,
+    required this.pincode,
     required this.address,
     required this.category,
     required this.shift,
@@ -207,7 +167,7 @@ class User {
         'criminalid': criminalid,
         'name': name,
         'age': age,
-        'district': district,
+        'pincode': pincode,
         'address': address,
         'category': category,
         'shift': shift,
@@ -220,7 +180,7 @@ class User {
         criminalid: json['criminalid'],
         name: json['name'],
         age: json['age'],
-        district: json['district'],
+        pincode: json['pincode'],
         address: json['address'],
         category: json['category'],
         shift: json['shift'],
