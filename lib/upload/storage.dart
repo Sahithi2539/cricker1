@@ -65,6 +65,12 @@ class Storage {
           .showSnackBar(SnackBar(content: Text("Image uploaded successfully")));
       progress.value = 0;
     });
-    return await ref.getDownloadURL();
+    // StorageTaskSnapshot storageTaskSnapshot =await storageUploadTask.onComplete;
+    var downloadUrl1 = await ref.getDownloadURL();
+
+    //Here you can get the download URL when the task has been completed.
+    print("Download URL " + downloadUrl1.toString());
+
+    return downloadUrl1;
   }
 }
