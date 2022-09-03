@@ -34,6 +34,7 @@ class _detailsState extends State<details> {
   final contRollerDist = TextEditingController();
   //final controllerCategory = DropdownButton();
   final controllerShift = TextEditingController();
+  final controllerImageurl = TextEditingController();
 
   File? image;
 
@@ -74,15 +75,15 @@ class _detailsState extends State<details> {
                   _storage.getImage(context).then((file) {
                     setState(() {
                       image = File(file.path);
-                      print(file.path);
+                      // print(file.path);
                     });
                   });
                 }),
             TextButton(
                 onPressed: () {
-                  if (image != null)
+                  if (image != null) {
                     _storage.uploadFile(image!, context);
-                  else
+                  } else
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("No Image was selected")));
                 },
@@ -139,6 +140,7 @@ class _detailsState extends State<details> {
                   address: controllerAddress.text,
                   category: value,
                   shift: controllerShift.text,
+                  imageurl: controllerImageurl.text,
                   //birthday: DateTime.parse(controllerDate.text),
                 );
 
@@ -184,6 +186,7 @@ class User {
   final String district;
   final String category;
   final String shift;
+  final String imageurl;
   // final DateTime birthday;
 
   User({
@@ -195,6 +198,7 @@ class User {
     required this.address,
     required this.category,
     required this.shift,
+    required this.imageurl,
     //required this.birthday,
   });
 
@@ -207,6 +211,7 @@ class User {
         'address': address,
         'category': category,
         'shift': shift,
+        'imageurl': imageurl,
         // 'birthday': birthday,
       };
 
@@ -219,5 +224,6 @@ class User {
         address: json['address'],
         category: json['category'],
         shift: json['shift'],
+        imageurl: json['imageurl'],
       );
 }
