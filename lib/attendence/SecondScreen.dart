@@ -1,11 +1,11 @@
 import 'package:cricker/addcriminals/details.dart';
+import 'package:cricker/addcriminals/display.dart';
 import 'package:cricker/attendence/verification.dart';
 import 'package:flutter/material.dart';
 import '../loginpage/login.dart';
 import '../criminalsheets/criminalsheets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../firebase_options.dart';
-import '../addcriminals/image.dart';
 
 class SecondScreen extends StatefulWidget {
   @override
@@ -137,7 +137,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => details()),
+                    MaterialPageRoute(builder: (context) => display()),
                   );
                 },
               ),
@@ -162,7 +162,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => display()),
                   );
                 },
               ),

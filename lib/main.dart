@@ -8,7 +8,6 @@ import 'attendence/verification.dart';
 import 'attendence/camera_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:hive/hive.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,22 +15,22 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MyApp());
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+} 
+// WidgetsFlutterBinding.ensureInitialized();
+// await Firebase.initializeApp(
+//   options: DefaultFirebaseOptions.currentPlatform,
+// );
 
-  // runApp(MyApp());
-  // var db = FirebaseFirestore.instance;
-  // final user = <String, dynamic>{
-  //   "first": "Ada",
-  //   "last": "Lovelace",
-  //   "born": 1811
-  // };
+// runApp(MyApp());
+// var db = FirebaseFirestore.instance;
+// final user = <String, dynamic>{
+//   "first": "Ada",
+//   "last": "Lovelace",
+//   "born": 1811
+// };
 
 // Add a new document with a generated ID
-  //db.collection("criminals").doc("criminal 4").set(user);
-}
+//db.collection("criminals").doc("criminal 4").set(user);
 
 class MyApp extends StatelessWidget {
   @override

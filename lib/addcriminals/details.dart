@@ -2,19 +2,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cricker/addcriminals/display.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'display.dart';
-import '../criminalsheets/criminalsheets.dart';
-import '../attendence/SecondScreen.dart';
-import '../attendence/verification.dart';
-import '../attendence/camera_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '../firebase_options.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 class details extends StatefulWidget {
   details({Key? key}) : super(key: key);
@@ -25,6 +15,9 @@ class details extends StatefulWidget {
 }
 
 class _detailsState extends State<details> {
+  XFile? image;
+  late String imgUrl;
+
   final controllerName = TextEditingController();
   final controllerAge = TextEditingController();
   final controllerCriminalid = TextEditingController();
@@ -50,6 +43,19 @@ class _detailsState extends State<details> {
         body: ListView(
           padding: EdgeInsets.all(16),
           children: <Widget>[
+            CircleAvatar(
+              radius: 50,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextButton.icon(
+                onPressed: (){},
+                icon: Icon(Icons.image),
+                label: Text('Add Image')),
+            const SizedBox(
+              height: 24,
+            ),
             TextField(
               controller: controllerCriminalid,
               decoration: decoration('Criminal Id'),

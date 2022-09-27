@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../attendence/SecondScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../firebase_options.dart';
-import '../addcriminals/image.dart';
+import '../addcriminals/detailss.dart';
 
 class buttons extends StatelessWidget {
   @override
@@ -150,7 +150,7 @@ class buttons extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => details()),
+                  MaterialPageRoute(builder: (context) => detailss()),
                 );
               },
             ),

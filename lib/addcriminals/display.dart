@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cricker/attendence/verification.dart';
 import 'package:cricker/read%20data/get_user_name.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../firebase_options.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+
 
 class display extends StatefulWidget {
   const display({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class _displayState extends State<display> {
   final contRollerDist = TextEditingController();
   final controllerCategory = TextEditingController();
   final controllerShift = TextEditingController();
+  final controllerImageurl = TextEditingController();
 
   //final controllerDate = TextEditingController();
 
@@ -63,9 +65,8 @@ class _displayState extends State<display> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            leading: const CircleAvatar(
-                              radius: 20,
-                              child: Icon(Icons.person),
+                            leading: const CircleAvatar(                              radius: 40,
+                              // child: // fit: BoxFit.fill,
                             ),
                             title: GetUserName(documentId: docIDs[index]),
                             tileColor: Colors.grey[200],
@@ -76,7 +77,7 @@ class _displayState extends State<display> {
                                 Navigator.push(
                                   context,
                                   new MaterialPageRoute(
-                                      builder: (context) => new display()),
+                                      builder: (context) => verification()),
                                 );
                               },
                             ),
