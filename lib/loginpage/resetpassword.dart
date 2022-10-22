@@ -1,4 +1,5 @@
 import 'package:cricker/loginpage/login.dart';
+import 'package:cricker/loginpage/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../criminalsheets/criminalsheets.dart';
@@ -12,88 +13,161 @@ class reset extends StatefulWidget {
 
 class _resetState extends State<reset> {
   late String _email;
+  final _formKey = GlobalKey<FormState>();
   final auth = FirebaseAuth.instance;
+
+  var email = "";
+
+  // Create a text controller and use it to retrieve the current value
+  // of the TextField.
+  final emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    super.dispose();
+  }
+
+  resetPassword() async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orangeAccent,
+          content: Text(
+            'Password Reset Email has been sent !',
+            style: TextStyle(fontSize: 18.0),
+          ),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orangeAccent,
+            content: Text(
+              'No user found for that email.',
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    appBar:
+    AppBar(
+      title: Text(""),
+    );
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/login.png'), fit: BoxFit.cover),
+            image: AssetImage('assets/register.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
+        body: Column(
           children: [
-            Container(),
             Container(
-              padding: EdgeInsets.only(left: 25, top: 130),
+              margin: EdgeInsets.only(top: 20.0),
               child: Text(
-                'Reset Password',
-                style: TextStyle(color: Colors.white, fontSize: 50),
+                'Reset Link will be sent to your email id !',
+                style: TextStyle(fontSize: 20.0),
               ),
             ),
-            SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 35, right: 35),
-                      child: Column(
-                        children: [
-                          TextField(
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                                fillColor: Colors.grey.shade100,
-                                filled: true,
-                                hintText: "Email",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
-                            onChanged: (value) {
-                              setState(() {
-                                _email = value.trim();
-                              });
-                            },
+            Expanded(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: ListView(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10.0),
+                        child: TextFormField(
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Email: ',
+                            labelStyle: TextStyle(fontSize: 20.0),
+                            border: OutlineInputBorder(),
+                            errorStyle: TextStyle(
+                                color: Colors.redAccent, fontSize: 15),
                           ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Send Request',
-                                style: TextStyle(
-                                    fontSize: 27, fontWeight: FontWeight.w700),
-                              ),
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Color(0xff4c505b),
-                                child: IconButton(
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => login()),
-                                      );
-                                      auth.sendPasswordResetEmail(
-                                          email: _email);
-                                      Navigator.of(context).pop();
-                                    },
-                                    icon: Icon(
-                                      Icons.arrow_forward,
-                                    )),
-                              )
-                            ],
-                          ),
-                        ],
+                          controller: emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please Enter Email';
+                            } else if (!value.contains('@')) {
+                              return 'Please Enter Valid Email';
+                            }
+                            return null;
+                          },
+                        ),
                       ),
-                    )
-                  ],
+                      Container(
+                        margin: EdgeInsets.only(left: 60.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                // Validate returns true if the form is valid, otherwise false.
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    email = emailController.text;
+                                  });
+                                  resetPassword();
+                                }
+                              },
+                              child: Text(
+                                'Send Email',
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (context, a, b) => login(),
+                                      transitionDuration: Duration(seconds: 0),
+                                    ),
+                                    (route) => false)
+                              },
+                              child: Text(
+                                'Login',
+                                style: TextStyle(fontSize: 14.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Don't have an Account? "),
+                            TextButton(
+                                onPressed: () => {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, a, b) =>
+                                                register(),
+                                            transitionDuration:
+                                                Duration(seconds: 0),
+                                          ),
+                                          (route) => false)
+                                    },
+                                child: Text('Signup'))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
